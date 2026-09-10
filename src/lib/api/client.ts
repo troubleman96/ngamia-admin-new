@@ -3,6 +3,7 @@ const API_BASE_URL =
 
 const ACCESS_TOKEN_KEY = "ngamia_admin_access_token";
 const REFRESH_TOKEN_KEY = "ngamia_admin_refresh_token";
+const ADMIN_PROFILE_KEY = "ngamia_admin_profile";
 
 export type ApiError = {
   status: number;
@@ -58,6 +59,14 @@ export function setTokens(access: string, refresh: string) {
 export function clearTokens() {
   localStorage.removeItem(ACCESS_TOKEN_KEY);
   localStorage.removeItem(REFRESH_TOKEN_KEY);
+  localStorage.removeItem(ADMIN_PROFILE_KEY);
+}
+
+export function setAdminProfile(profile: unknown) { localStorage.setItem(ADMIN_PROFILE_KEY, JSON.stringify(profile)); }
+export function getAdminProfile<T = { email?: string; full_name?: string; role?: string }>(): T | null {
+  if (typeof window === "undefined") return null;
+  const raw = localStorage.getItem(ADMIN_PROFILE_KEY);
+  try { return raw ? JSON.parse(raw) as T : null; } catch { return null; }
 }
 
 async function refreshAccessToken(): Promise<boolean> {
