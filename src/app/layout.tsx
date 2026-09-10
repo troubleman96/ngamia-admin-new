@@ -15,9 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Ngamia AI — Intelligent APIs for Africa",
-  description:
-    "Access powerful AI models through a simple API. Chat, vision, audio, and more.",
+  title: "Ngamia Admin — Platform Operations",
+  description: "Secure platform operations for Ngamia.",
+  icons: { icon: "/favicon.png", apple: "/logo-512.png" },
 };
 
 export default function RootLayout({

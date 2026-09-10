@@ -16,6 +16,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { useState } from "react";
+import Image from "next/image";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -233,9 +234,7 @@ export function Sidebar() {
     <aside className="fixed bottom-0 left-0 top-0 z-40 hidden w-60 flex-col border-r bg-sidebar lg:flex">
       <div className="flex h-13 shrink-0 items-center gap-2 px-3 py-3">
         <Link href="/dashboard" className="flex items-center gap-2 overflow-hidden">
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground">
-            N
-          </span>
+          <Image src="/logo-512.png" alt="Ngamia" width={32} height={32} className="shrink-0 rounded-lg" />
           <span className="truncate text-[15px] font-semibold tracking-tight">
             Ngamia
           </span>
@@ -273,9 +272,7 @@ export function MobileMenu() {
       <SheetContent side="left" className="flex w-72 flex-col p-0">
         <SheetHeader className="flex-row items-center justify-between px-3 py-3">
           <SheetTitle className="flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground">
-              N
-            </span>
+            <Image src="/logo-512.png" alt="Ngamia" width={32} height={32} className="rounded-lg" />
             <span className="text-[15px] font-semibold tracking-tight">Ngamia</span>
           </SheetTitle>
           <SheetClose render={<Button variant="ghost" size="icon" aria-label="Close menu" />}>
