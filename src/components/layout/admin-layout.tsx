@@ -1,60 +1,16 @@
 "use client";
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Users, Settings2, CreditCard, LayoutDashboard, Activity, Boxes, Building2, BarChart3, TrendingUp, UserRound, Wallet, Bell, ShieldCheck } from "lucide-react";
-
+import { Activity, BarChart3, Bell, Boxes, Building2, CreditCard, LayoutDashboard, Menu, Settings2, ShieldCheck, TrendingUp, UserRound, Users, Wallet, X } from "lucide-react";
+import { useState } from "react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
-
-const adminNav = [
-  { href: "/admin", label: "Overview", icon: LayoutDashboard },
-  { href: "/admin/analytics/overview", label: "Analytics", icon: BarChart3 },
-  { href: "/admin/analytics/models", label: "Model usage", icon: TrendingUp },
-  { href: "/admin/analytics/users", label: "User usage", icon: UserRound },
-  { href: "/admin/analytics/profit", label: "Profit", icon: Wallet },
-  { href: "/admin/users", label: "Users", icon: Users },
-  { href: "/admin/payments", label: "Payments", icon: CreditCard },
-  { href: "/admin/activity", label: "Activity", icon: Activity },
-  { href: "/admin/catalog", label: "Model catalog", icon: Boxes },
-  { href: "/admin/workspaces", label: "Workspaces", icon: Building2 },
-  { href: "/admin/notifications", label: "Notifications", icon: Bell },
-  { href: "/admin/security", label: "Security", icon: ShieldCheck },
-  { href: "/admin/settings", label: "Settings", icon: Settings2 },
-];
-
-export function AdminLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-
-  return (
-    <div className="mx-auto max-w-6xl space-y-6">
-      <div>
-        <h1 className="text-xl font-semibold tracking-tight">Admin</h1>
-        <p className="text-sm text-muted-foreground">
-          Manage users, payments, and platform settings.
-        </p>
-      </div>
-
-      <div className="flex gap-1.5 overflow-x-auto border-b">
-        {adminNav.map((item) => {
-          const active =
-            pathname === item.href || pathname.startsWith(item.href + "/");
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "flex shrink-0 items-center gap-2 rounded-t-md border-b-2 px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground",
-                active && "border-primary text-foreground"
-              )}
-            >
-              <item.icon className="h-4 w-4" />
-              {item.label}
-            </Link>
-          );
-        })}
-      </div>
-
-      {children}
-    </div>
-  );
-}
+import { Button } from "@/components/ui/button";
+const groups = [
+  { label: "Overview", items: [["/admin", "Overview", LayoutDashboard], ["/admin/analytics/overview", "Analytics", BarChart3], ["/admin/analytics/models", "Model usage", TrendingUp], ["/admin/analytics/users", "User usage", UserRound], ["/admin/analytics/profit", "Profit", Wallet]] },
+  { label: "Operations", items: [["/admin/users", "Users", Users], ["/admin/payments", "Payments", CreditCard], ["/admin/activity", "Activity", Activity], ["/admin/catalog", "Model catalog", Boxes], ["/admin/workspaces", "Workspaces", Building2]] },
+  { label: "Control", items: [["/admin/notifications", "Broadcasts", Bell], ["/admin/security", "Security & MFA", ShieldCheck], ["/admin/settings", "Settings", Settings2]] },
+] as const;
+function Nav({ close }: { close?: () => void }) { const pathname = usePathname(); return <nav className="space-y-5">{groups.map((group) => <div key={group.label}><p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{group.label}</p><div className="space-y-1">{group.items.map(([href, label, Icon]) => { const active = pathname === href || (href !== "/admin" && pathname.startsWith(`${href}/`)); return <Link key={href} href={href} onClick={close} className={cn("flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground", active && "bg-primary/10 font-medium text-primary")}><Icon className="h-4 w-4" />{label}</Link>; })}</div></div>)}</nav>; }
+function Sidebar({ mobile = false, close }: { mobile?: boolean; close?: () => void }) { return <aside className={cn("flex flex-col bg-background", !mobile && "fixed inset-y-0 left-0 z-40 hidden w-64 border-r p-4 lg:flex")}><div className="mb-8 flex items-center gap-3 px-3"><Image src="/logo-512.png" alt="Ngamia" width={36} height={36} className="rounded-lg" /><div><p className="font-semibold tracking-tight">Ngamia</p><p className="text-[10px] uppercase tracking-wider text-muted-foreground">Admin console</p></div>{mobile && <Button type="button" variant="ghost" size="icon" className="ml-auto" onClick={close} aria-label="Close navigation"><X className="h-4 w-4" /></Button>}</div><Nav close={close} /></aside>; }
+export function AdminLayout({ children }: { children: React.ReactNode }) { const [open, setOpen] = useState(false); return <div className="flex min-h-[calc(100dvh-2rem)] gap-0"><Sidebar /><div className="min-w-0 flex-1 lg:pl-64"><div className="mb-6 flex items-center gap-3 border-b pb-4 lg:hidden"><Button type="button" variant="outline" size="icon" onClick={() => setOpen(true)} aria-label="Open navigation"><Menu className="h-4 w-4" /></Button><span className="font-semibold">Ngamia Admin</span></div>{open && <div className="fixed inset-0 z-50 bg-background p-4 lg:hidden"><Sidebar mobile close={() => setOpen(false)} /></div>}<div className="space-y-6">{children}</div></div></div>; }
