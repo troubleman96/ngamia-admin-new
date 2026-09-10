@@ -2,9 +2,7 @@
 
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { Sidebar } from "@/components/layout/sidebar";
 import { AuthProvider, useAuth } from "@/lib/auth/auth-context";
-import { WorkspaceProvider } from "@/lib/auth/workspace-context";
 
 function AdminGuard({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
@@ -26,9 +24,8 @@ function AdminGuard({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-dvh bg-background lg:pl-60">
-      <Sidebar />
-      <main className="flex-1 px-4 pb-8 pt-4 sm:px-6 lg:px-8">
+    <div className="min-h-dvh bg-background">
+      <main className="mx-auto max-w-7xl px-4 pb-8 pt-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-6xl pb-6">{children}</div>
       </main>
     </div>
@@ -40,9 +37,7 @@ export default function AdminRouteLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <AuthProvider>
-      <WorkspaceProvider>
-        <AdminGuard>{children}</AdminGuard>
-      </WorkspaceProvider>
+      <AdminGuard>{children}</AdminGuard>
     </AuthProvider>
   );
 }

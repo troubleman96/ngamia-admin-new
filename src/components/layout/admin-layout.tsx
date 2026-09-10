@@ -2,10 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Users, Settings2, CreditCard, ShieldAlert, LayoutDashboard, Activity, Boxes, Building2 } from "lucide-react";
+import { Users, Settings2, CreditCard, LayoutDashboard, Activity, Boxes, Building2 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { useProfile } from "@/lib/api/hooks/profile";
 
 const adminNav = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard },
@@ -18,44 +17,7 @@ const adminNav = [
 ];
 
 export function AdminLayout({ children }: { children: React.ReactNode }) {
-  const { data: profile, isLoading } = useProfile();
   const pathname = usePathname();
-
-  const isAdmin = profile?.role === "admin" || profile?.role === "super_admin";
-
-  if (isLoading) {
-    return (
-      <div className="flex min-h-dvh items-center justify-center">
-        <div className="spinner" />
-      </div>
-    );
-  }
-
-  if (!isAdmin) {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center p-6">
-        <div className="flex max-w-sm flex-col items-center gap-4 text-center">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-destructive/10">
-            <ShieldAlert className="h-7 w-7 text-destructive" />
-          </div>
-          <div>
-            <h1 className="text-lg font-semibold tracking-tight">
-              Admin access required
-            </h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              You need an admin role to view this section.
-            </p>
-          </div>
-          <Link
-            href="/dashboard"
-            className="rounded-md border px-4 py-2 text-sm font-medium"
-          >
-            Back to dashboard
-          </Link>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
