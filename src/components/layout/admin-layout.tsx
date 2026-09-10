@@ -2,17 +2,23 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Users, Settings2, CreditCard, LayoutDashboard, Activity, Boxes, Building2 } from "lucide-react";
+import { Users, Settings2, CreditCard, LayoutDashboard, Activity, Boxes, Building2, BarChart3, TrendingUp, UserRound, Wallet, Bell, ShieldCheck } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
 const adminNav = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard },
+  { href: "/admin/analytics/overview", label: "Analytics", icon: BarChart3 },
+  { href: "/admin/analytics/models", label: "Model usage", icon: TrendingUp },
+  { href: "/admin/analytics/users", label: "User usage", icon: UserRound },
+  { href: "/admin/analytics/profit", label: "Profit", icon: Wallet },
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/payments", label: "Payments", icon: CreditCard },
   { href: "/admin/activity", label: "Activity", icon: Activity },
   { href: "/admin/catalog", label: "Model catalog", icon: Boxes },
   { href: "/admin/workspaces", label: "Workspaces", icon: Building2 },
+  { href: "/admin/notifications", label: "Notifications", icon: Bell },
+  { href: "/admin/security", label: "Security", icon: ShieldCheck },
   { href: "/admin/settings", label: "Settings", icon: Settings2 },
 ];
 

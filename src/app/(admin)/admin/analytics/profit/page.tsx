@@ -1,0 +1,7 @@
+"use client";
+import { useQuery } from "@tanstack/react-query";
+import { AdminLayout } from "@/components/layout/admin-layout";
+import { Card } from "@/components/ui/card";
+import { api } from "@/lib/api/client";
+type Profit = { model_code?: string; provider?: string; revenue?: number; upstream_cost?: number; profit?: number; margin_percent?: number };
+export default function ProfitPage() { const query = useQuery({ queryKey: ["admin-analytics-profit"], queryFn: () => api.get<{ by_model?: Profit[] } | Profit[]>("/v1/admin/analytics/profit") }); const rows = Array.isArray(query.data) ? query.data : query.data?.by_model ?? []; return <AdminLayout><Card className="overflow-hidden"><div className="border-b p-5"><h2 className="font-semibold">Profit report</h2><p className="text-sm text-muted-foreground">Revenue, upstream cost, and margin by model.</p></div>{query.isLoading ? <p className="p-5 text-sm text-muted-foreground">Loading profit report…</p> : <div className="divide-y">{rows.map((row, index) => <div key={`${row.model_code}-${index}`} className="grid gap-2 p-4 sm:grid-cols-4"><span className="font-medium">{row.model_code ?? "Unknown model"}</span><span className="text-sm text-muted-foreground">Revenue: {row.revenue ?? 0}</span><span className="text-sm text-muted-foreground">Cost: {row.upstream_cost ?? 0}</span><span className="text-sm font-medium">Margin: {row.margin_percent ?? "—"}%</span></div>)}</div>}</Card></AdminLayout>; }

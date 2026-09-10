@@ -1,0 +1,7 @@
+"use client";
+import { useQuery } from "@tanstack/react-query";
+import { AdminLayout } from "@/components/layout/admin-layout";
+import { Card } from "@/components/ui/card";
+import { api } from "@/lib/api/client";
+type Model = { model_code?: string; provider?: string; requests?: number; request_count?: number; cost_credits?: number; credits?: number };
+export default function ModelAnalyticsPage() { const query = useQuery({ queryKey: ["admin-analytics-models"], queryFn: () => api.get<Model[]>("/v1/admin/analytics/models") }); return <AdminLayout><Card className="overflow-hidden"><div className="border-b p-5"><h2 className="font-semibold">Usage by model</h2><p className="text-sm text-muted-foreground">Model-level request and credit consumption.</p></div>{query.isLoading ? <p className="p-5 text-sm text-muted-foreground">Loading model analytics…</p> : <div className="divide-y">{(query.data ?? []).map((model, index) => <div key={`${model.model_code}-${index}`} className="flex items-center justify-between p-4"><div><p className="font-medium">{model.model_code ?? "Unknown model"}</p><p className="text-sm text-muted-foreground">{model.provider ?? "Unknown provider"}</p></div><div className="text-right text-sm"><p>{(model.requests ?? model.request_count ?? 0).toLocaleString()} requests</p><p className="text-muted-foreground">{model.cost_credits ?? model.credits ?? 0} credits</p></div></div>)}</div>}</Card></AdminLayout>; }
